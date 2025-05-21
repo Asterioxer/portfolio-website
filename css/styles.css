@@ -1,3 +1,168 @@
+/* Three.js Background Styles */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    perspective: 1000px; /* Add perspective for 3D effect */
+}
+
+/* Fallback background gradient for when Three.js is loading */
+.hero-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(0, 217, 255, 0.15) 0%, 
+        rgba(110, 86, 207, 0.15) 50%, 
+        rgba(255, 97, 216, 0.15) 100%);
+    opacity: 1;
+    transition: opacity 1.2s ease;
+    z-index: 0;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+/* Loading indicator */
+.loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    width: 60px;
+    height: 60px;
+    z-index: 1;
+    opacity: 0.7;
+    transition: opacity 0.8s ease-out, transform 0.5s ease-out;
+    pointer-events: none;
+}
+
+.loading-indicator::before,
+.loading-indicator::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    opacity: 0.6;
+    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.loading-indicator::after {
+    animation-delay: 0.5s;
+    background-color: var(--accent-color); /* Use accent color for second ring */
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.3);
+        opacity: 0.7;
+    }
+    80%, 100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+/* Hero section container */
+#hero {
+    position: relative;
+    height: 100vh; /* Ensure hero takes full viewport height */
+    min-height: 600px; /* Minimum height for smaller screens */
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+#hero .container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+}
+
+/* Three.js container */
+#three-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow interaction with elements behind */
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, transform 1s ease-out;
+    transform: scale(1.05); /* Slight scale for zoom-in effect */
+    z-index: 2;
+}
+
+#three-bg.loaded {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#three-bg canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important; /* Ensure full width */
+    height: 100% !important; /* Ensure full height */
+    object-fit: cover; /* Cover the container */
+}
+
+/* Hide loading indicator when animation is loaded */
+#three-bg.loaded ~ .loading-indicator {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+}
+
+/* Hide fallback when animation is loaded */
+#three-bg.loaded ~ .hero-background::before {
+    opacity: 0;
+}
+
+/* Content animation when three.js loads */
+#three-bg.loaded ~ .container .hero-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    #hero {
+        min-height: 500px; /* Smaller minimum height for mobile */
+    }
+    
+    #three-bg {
+        opacity: 0; /* Start with 0 opacity */
+    }
+    
+    #three-bg.loaded {
+        opacity: 0.6; /* Reduce opacity on mobile for better text readability */
+    }
+    
+    .hero-background::before {
+        background: linear-gradient(135deg, 
+            rgba(0, 217, 255, 0.2) 0%, 
+            rgba(110, 86, 207, 0.2) 50%, 
+            rgba(255, 97, 216, 0.2) 100%);
+        opacity: 0.8; /* Stronger fallback on mobile */
+    }
+}
+
+/* Preload animation for hero content - controlled by JS */
+.hero-content {
+    /* Initial state is handled by JavaScript for better synchronization with Three.js */
+    will-change: transform, opacity;
+}
+
 /* 
 ======================
 GENERAL STYLES
@@ -759,70 +924,263 @@ CONTACT SECTION
 }
 
 .contact-form {
-    background: white;
-    padding: 2rem;
+    background: var(--card-bg);
+    padding: 2.5rem;
     border-radius: var(--border-radius-lg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 217, 255, 0.1);
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+/* Floating label style */
+.floating-label .input-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.floating-label label {
+    position: absolute;
+    left: 3.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    pointer-events: none;
+    transition: all 0.25s ease;
+    padding: 0 5px;
+    font-size: 1rem;
+    background: transparent;
+    z-index: 1;
+}
+
+.floating-label textarea ~ label {
+    top: 1.2rem;
+    transform: none;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
+    padding: 1rem 1rem 1rem 3.2rem;
+    background-color: var(--light-dark-color);
+    color: var(--text-color);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-radius);
     font-family: var(--body-font);
-    transition: var(--transition);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+    padding-top: 1.5rem;
+}
+
+/* Focus effects and floating animation */
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group input:not(:placeholder-shown),
+.form-group textarea:not(:placeholder-shown) {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
+    background-color: rgba(30, 30, 30, 0.9);
+    box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.15);
+}
+
+.floating-label input:focus ~ label,
+.floating-label textarea:focus ~ label,
+.floating-label input:not(:placeholder-shown) ~ label,
+.floating-label textarea:not(:placeholder-shown) ~ label {
+    top: -12px;
+    left: 2.5rem;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    background-color: var(--light-dark-color);
+    padding: 0 8px;
+    transition: 0.3s;
+}
+
+.floating-label textarea:focus ~ label,
+.floating-label textarea:not(:placeholder-shown) ~ label {
+    top: -12px;
+    left: 2.5rem;
+}
+
+/* Focus border animation */
+.focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.form-group input:focus ~ .focus-border,
+.form-group textarea:focus ~ .focus-border {
+    width: calc(100% - 2px);
+    left: 1px;
+}
+
+/* Input icons */
+.input-icon {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.floating-label textarea ~ .input-icon {
+    top: 1.5rem;
+    transform: none;
+}
+
+.form-group:hover .input-icon,
+.form-group input:focus ~ .input-icon-wrapper .input-icon,
+.form-group textarea:focus ~ .input-icon-wrapper .input-icon,
+.form-group input:not(:placeholder-shown) ~ .input-icon-wrapper .input-icon,
+.form-group textarea:not(:placeholder-shown) ~ .input-icon-wrapper .input-icon {
+    color: var(--primary-color);
 }
 
 /* Error and success messages */
 .form-group.error input,
 .form-group.error textarea {
     border-color: #ff3860;
+    box-shadow: 0 0 0 3px rgba(255, 56, 96, 0.1);
+}
+
+.form-group.error .input-icon {
+    color: #ff3860;
 }
 
 .error-message {
     color: #ff3860;
     font-size: 0.85rem;
     margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--border-radius);
+    background-color: rgba(255, 56, 96, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeInError 0.3s forwards;
+}
+
+.error-message::before {
+    content: "\f071";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+@keyframes fadeInError {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .success-message {
-    background-color: rgba(76, 175, 80, 0.1);
-    border-left: 4px solid var(--success-color);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
+    background-color: rgba(0, 230, 118, 0.1);
+    border: 1px solid var(--success-color);
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
     display: flex;
     align-items: center;
-    margin-top: 1rem;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 230, 118, 0.1);
+    animation: successPulse 2s infinite;
+}
+
+@keyframes successPulse {
+    0% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 5px rgba(0, 230, 118, 0.1);
+    }
+    50% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 230, 118, 0.3);
+    }
+    100% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 5px rgba(0, 230, 118, 0.1);
+    }
 }
 
 .success-message i {
     color: var(--success-color);
-    font-size: 2rem;
-    margin-right: 1rem;
+    font-size: 2.5rem;
+    margin-right: 1.5rem;
+    animation: successRotate 2s ease-in-out infinite;
+}
+
+@keyframes successRotate {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1) rotate(10deg);
+    }
 }
 
 .success-message p {
     margin: 0;
-    color: var(--dark-color);
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Submit button with loading state */
+.btn-submit {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-loading i {
+    font-size: 1.2rem;
+}
+
+.btn-submit.loading .btn-loading {
+    opacity: 1;
+    visibility: visible;
+}
+
+.btn-submit.loading .btn-text {
+    opacity: 0;
 }
 
 /* 

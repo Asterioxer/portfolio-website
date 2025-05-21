@@ -163,7 +163,6 @@ function setupFormValidation() {
     
     if (!contactForm) return;
     
-    contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
         // Get form fields

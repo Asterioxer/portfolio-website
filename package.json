@@ -1,0 +1,28 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
+    "dotenv": "^16.5.0",
+    "gsap": "^3.13.0",
+    "three": "^0.176.0",
+    "vue": "^3.5.14",
+    "vue-router": "^4.5.1",
+    "vue-scrollto": "^2.20.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "vite": "^6.3.5"
+  }
+}

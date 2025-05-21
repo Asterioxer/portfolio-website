@@ -1,0 +1,42 @@
+// Color variables
+$primary-color: #00d9ff;
+$secondary-color: #6e56cf;
+$accent-color: #ff61d8;
+$dark-color: #101010;
+$light-dark-color: #1a1a1a;
+$text-color: #ffffff;
+$text-light: rgba(255, 255, 255, 0.7);
+$glass-border: rgba(255, 255, 255, 0.1);
+$success-color: #00e676;
+
+// Spacing variables
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Border radius
+$border-radius: 8px;
+$border-radius-lg: 12px;
+
+// Transitions
+$transition: all 0.3s ease;
+
+// Typography
+$body-font: 'Inter', 'Segoe UI', Roboto, sans-serif;
+$heading-font: 'Poppins', 'Segoe UI', Roboto, sans-serif;
+
+// Breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
+
+// Z-indices
+$z-back: -1;
+$z-normal: 1;
+$z-header: 1000;
+$z-modal: 2000;
+$z-tooltip: 3000;
+
